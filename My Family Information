@@ -87,9 +87,9 @@ rows:  CAMquestions
 columns:
   - Question: |
       row_item['CAMquestion']
-  - Selected answers: |
+  - Selected Answers: |
       row_item['CAManswers'].true_values()
-  - No. Selected answers: |
+  - No. Selected Answers: |
       len(row_item['CAManswers'].true_values())
 ---
 question: |
