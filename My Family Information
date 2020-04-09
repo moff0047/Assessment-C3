@@ -1,0 +1,129 @@
+---
+variable name: CAMperson_info
+use objects: True
+data:
+  - First Name: Casey
+    Last Name: Moffatt
+    Age: 24
+    Hobbies: Football
+    Do you like pets?: True
+  - First Name: Debbie
+    Last Name: Moffatt
+    Age: 59
+    Hobbies: Cooking
+    Do you like pets?: True
+  - First Name: David
+    Last Name: Moffatt
+    Age: 59
+    Hobbies: Fishing
+    Do you like pets?: True
+  - First Name: Jessie
+    Last Name: Moffatt
+    Age: 21
+    Hobbies: Sleeping
+    Do you like pets?: I am one
+  - First Name: Max
+    Last Name: Moffatt
+    Age: 10
+    Hobbies: Going for walks
+    Do you like pets?: I am one
+  - First Name: Cody
+    Last Name: Moffatt
+    Age: 7
+    Hobbies: Belly rubs
+    Do you like pets?: I am one
+---  
+mandatory: True
+question: My Family Information 
+subquestion: |
+  #### See Your Results in the Table Below
+  
+  ${ CAMquestion_table }
+  
+attachment:
+  docx template file: family_table.docx
+  valid formats: 
+    - pdf
+buttons:
+  - Exit: exit
+  - Restart: restart
+---
+variable name: CAMquestions
+use objects: True
+data:
+  - CAMquestion: Is the information displayed correct for Casey Moffatt?
+    CAMchoices:
+      - 24 years old
+      - Hobbies include football
+      - Likes pets
+  - CAMquestion: Is the information displayed correct for Debbie Moffatt?
+    CAMchoices:
+      - 59 years old
+      - Hobbies include cooking
+      - Likes pets
+  - CAMquestion: Is the information displayed correct for David Moffatt?
+    CAMchoices:
+      - 59 years old
+      - Hobbies include fishing
+      - Likes pets
+  - CAMquestion: Is the information displayed correct for Jessie Moffatt?
+    CAMchoices:
+      - 21 years old
+      - Hobbies include sleeping
+      - Is a pet
+  - CAMquestion: Is the information displayed correct for Max Moffatt?
+    CAMchoices:
+      - 10 years old
+      - Hobbies include walks
+      - Is a pet
+  - CAMquestion: Is the information displayed correct for Cody Moffatt?
+    CAMchoices:
+      - 7 years old
+      - Hobbies include belly rrubs
+      - Is a pet
+---
+table: CAMquestion_table
+rows:  CAMquestions
+columns:
+  - Question: |
+      row_item['CAMquestion']
+  - Selected answers: |
+      row_item['CAManswers'].true_values()
+  - No. Selected answers: |
+      len(row_item['CAManswers'].true_values())
+---
+question: |
+  ${ CAMquestions[i]['CAMquestion'] }
+fields:
+  - no label: CAMquestions[i]['CAManswers']
+    datatype: checkboxes
+    code: CAMquestions[i]['CAMchoices']
+---
+---
+mandatory: True
+code: |
+  CAMcolumn_header = ""
+
+  for CAMitem in CAMperson_info[0]:
+    CAMcolumn_header += CAMitem + '|'
+
+  CAMcolumn_header = CAMcolumn_header[:-1]
+---
+code: |
+  CAMdashes = "----"
+  for i in range(len(CAMperson_info[0]) - 1):
+    CAMdashes += "|----"
+---
+code: | 
+  CAMtable_rows = []
+
+  for CAMitem in CAMperson_info:
+
+      MDrow = ""
+      for CAMkey in CAMitem:
+        MDrow += str(CAMitem[CAMkey]) + '|'
+
+      MDrow = MDrow[:-1]
+
+      CAMtable_rows.append(MDrow)
+---
